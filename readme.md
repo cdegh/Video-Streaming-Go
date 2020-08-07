@@ -1,4 +1,4 @@
-# MovieNight stream server
+# Video-Streaming-Go
 
 This is a single-instance streaming server with chat.
 
