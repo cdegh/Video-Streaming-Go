@@ -1,26 +1,6 @@
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-**Table of Contents**
-
-- [MovieNight stream server](#movienight-stream-server)
-    - [Build requirements](#build-requirements)
-        - [Older Go Versions](#older-go-versions)
-        - [Compile and install](#compile-and-install)
-        - [Docker build](#docker-build)
-            - [Building the Container](#building-the-container)
-            - [Running the Container](#running-the-container)
-            - [docker-compose](#docker-compose)
-            - [Notes for Running Using docker-compose](#notes-for-running-using-docker-compose)
-    - [Usage](#usage)
-    - [Configuration](#configuration)
-
-<!-- markdown-toc end -->
 # MovieNight stream server
 
-[![Build status](https://api.travis-ci.org/zorchenhimer/MovieNight.svg?branch=master)](https://travis-ci.org/zorchenhimer/MovieNight)
-
-This is a single-instance streaming server with chat.  Originally written to
-replace Rabbit as the platform for watching movies with a group of people
-online.
+This is a single-instance streaming server with chat.
 
 ## Build requirements
 
@@ -41,32 +21,28 @@ the newer version.
 To just download and run:
 
 ```bash
-$ git clone https://github.com/zorchenhimer/MovieNight
-$ cd MovieNight
+$ cd Video-Streaming-Go
 $ make
-$ ./MovieNight
+$ ./Video-Streaming-Go
 ```
-
-### Docker build
-MovieNight provides a Dockerfile and a docker-compose file to run MovieNight using Docker.
 
 #### Building the Container
 Install Docker, clone the repository and build:
 
 ```shell
-docker build -t movienight .
+docker build -t streaming .
 ```
 
 #### Running the Container
 Run the image once it's built:
 
 ```shell
-docker run -d -p 8089:8089 -p 1935:1935 [-v ./settings.json:/config/settings.json] movienight
+docker run -d -p 8089:8089 -p 1935:1935 [-v ./settings.json:/config/settings.json] streaming
 ```
 
 Explanation:
 - **-d** runs the container in the background.
-- **-p 8089:8089** maps the MovieNight web interface to port 8089 on the server.
+- **-p 8089:8089** maps the streaming web interface to port 8089 on the server.
 - **-p 1935:1935** maps the RTMP port for OBS to port 1935 (default RTMP port) on the server.
 - **-v ./settings.json:/config/settings.json** maps the file *settings.json* into the container. [OPTIONAL]
 
@@ -78,9 +54,6 @@ Install Docker and docker-compose, clone the repository and change into the dire
 ```shell
 docker-compose up -d
 ```
-
-This docker-compose file will create a volume called *movienight-config* and automatically add the standard *settings.json* file to it. It also maps port 8089 and 1935 to the same ports of the host.
-
 #### Notes for Running Using docker-compose
 The container needs to be restarted to apply any changes you make to *settings.json*.
 
@@ -116,41 +89,41 @@ The default listen port is `:8089`.  It can be changed by providing a new port
 at startup:
 
 ```text
-Usage of .\MovieNight.exe:
+Usage of .\streaming.exe:
   -e bool
         Whether or not to download approved emotes on startup (default "false")
   -k string
         Stream key, to protect your stream (default: "")
   -l string
-        host:port of the MovieNight (default ":8089")
+        host:port of the streaming (default ":8089")
   -r string
         host:port of the RTMP server (default ":1935")
 ```
 
 ## Configuration
 
-MovieNight’s configuration is controlled by `settings.json`:
+Streaming’s configuration is controlled by `settings.json`:
 
 - `AdminPassword`: users can enter `/auth <value>` into chat to grant themselves
   admin privileges.  This value is automatically regenerated unless
   `RegenAdminPass` is false.
 - `ApprovedEmotes`: list of Twitch users whose emotes can be imported into
-  MovieNight.  Using `/addemotes <username>` in chat will add to this list.
+  Streaming.  Using `/addemotes <username>` in chat will add to this list.
 - `Bans`: list of banned users.
 - `LetThemLurk`: if false, announces when a user enters and leaves chat.
-- `ListenAddress`: the port that MovieNight listens on, formatted as `:8089`.
-- `LogFile`: the path of the MovieNight logfile, relative to the executable.
+- `ListenAddress`: the port that Streaming listens on, formatted as `:8089`.
+- `LogFile`: the path of the Streaming logfile, relative to the executable.
 - `LogLevel`: the log level, defaults to `debug`.
 - `MaxMessageCount`: the number of messages displayed in the chat window.
 - `NewPin`: if true, regenerates `RoomAccessPin` when the server starts.
 - `PageTitle`: The base string used in the `<title>` element of the page.  When
-  the stream title is set with `/playing`, it is appended; e.g., `Movie Night | The Man Who Killed Hitler and Then the Bigfoot`
+  the stream title is set with `/playing`, it is appended; e.g., `Streaming | The Man Who Killed Hitler and Then the Bigfoot`
 - `RegenAdminPass`: if true, regenerates `AdminPassword` when the server starts.
 - `RoomAccess`: the access policy of the chat room; this is managed by the
   application and should not be edited manually.
 - `RoomAccessPin`: if set, serves as the password required to enter the chatroom.
 - `SessionKey`: key used for storing session data (cookies etc.)
-- `StreamKey`: the key that OBS will use to connect to MovieNight.
+- `StreamKey`: the key that OBS will use to connect to Streaming.
 - `StreamStats`: if true, prints statistics for the stream on server shutdown.
 - `TitleLength`: the maximum allowed length for the stream title (set with `/playing`).
 - `TwitchClientID`: OAuth client ID for the Twitch API, used for fetching emotes
@@ -166,7 +139,3 @@ MovieNight’s configuration is controlled by `settings.json`:
   duplicate message.
 - `NoCache`: if true, set `Cache-Control: no-cache, must-revalidate` in the HTTP
   header, to prevent caching responses.
-
-## License
-
-`flv.js` is Licensed under the Apache 2.0 license.  This project is licened under the MIT license.
