@@ -1,3 +1,4 @@
+This fork is for the purpose of preservation.
 # Video-Streaming-Go
 
 This is a single-instance streaming server with chat.
